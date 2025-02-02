@@ -1,0 +1,24 @@
+{
+  "name": "Security Extension",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "sx-logo.png",
+      "48": "sx-logo.png",
+      "128": "sx-logo.png"
+    }
+  },
+  "background": {
+    "service_worker": "service-worker.ts"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://haven.xx.network/*"],
+      "js": ["content-script.ts"]
+    }
+  ],
+  "permissions": ["storage"]
+}
