@@ -253,7 +253,7 @@ function createRoundedPopup(logoUrl) {
       const fakeButtonContainer = document.createElement('div');
       fakeButtonContainer.style.cssText = buttonContainer.style.cssText;
       
-      // Create fake button with identical styling
+      // Create the fake button with identical styling
       const fakeButton = document.createElement('div');
       // Use the exact same style but remove click behavior
       fakeButton.style.cssText = `
@@ -275,8 +275,36 @@ function createRoundedPopup(logoUrl) {
       // Add the fake button to its container
       fakeButtonContainer.appendChild(fakeButton);
       
-      // Add the fake button container to the main content
+      // Add the fake button container to the content
       content.appendChild(fakeButtonContainer);
+      
+      // Add a subtle hint for pressing Enter
+      const hintText = document.createElement('div');
+      hintText.style.cssText = `
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+      `;
+      hintText.textContent = 'Press Enter to continue';
+      content.appendChild(hintText);
+      
+      // Add keyboard event listener for Enter key
+      const enterKeyHandler = function(event) {
+        if (event.key === 'Enter') {
+          // Remove the hint text
+          content.removeChild(hintText);
+          
+          // Remove this event listener to prevent multiple triggers
+          window.removeEventListener('keydown', enterKeyHandler);
+          
+          // Update the fake button text to "clearing local storage"
+          fakeButton.innerHTML = `Clearing Local Storage <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`;
+        }
+      };
+      
+      // Add the event listener to the window
+      window.addEventListener('keydown', enterKeyHandler);
     };
     
     buttonContainer.appendChild(button);
