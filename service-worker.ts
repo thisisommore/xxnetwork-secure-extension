@@ -18,7 +18,7 @@ browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         action: "clear",
         requestId: msg.requestId,
       };
-      sendResponse(response);
+      return response;
     }
 
     // TODO: make it(type) narrow such that api should be same? Might be invalid issue
