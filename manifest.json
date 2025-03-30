@@ -4,27 +4,19 @@
   "version": "1.0",
   "manifest_version": 3,
   "action": {
-<<<<<<< HEAD
-    "default_popup": "index.html",
-=======
->>>>>>> 4179036 (creation of first page UI)
     "default_icon": {
-      "16": "xxlogo.png",
-      "48": "xxlogo.png",
-      "128": "xxlogo.png"
+      "16": "16xxlogo.png",
+      "48": "48xxlogo.png",
+      "128": "128xxlogo.png"
     }
   },
-<<<<<<< HEAD
-  "content_scripts": [
-=======
   "background": {
     "service_worker": "service-worker.ts",
     "type": "module"
   },
   "content_scripts": [ 
->>>>>>> 4179036 (creation of first page UI)
     {
-      "matches": ["http://localhost:3000/*"],
+      "matches": ["http://haven.xx.network/*"],
       "js": ["content-script.ts"]
     }
   ],
@@ -34,8 +26,8 @@
     "activeTab",
     "tabs"
   ],
+
   "host_permissions": [
-    "http://*/*",
-    "https://*/*"
+    "https://haven.xx.network/*"
   ]
 } 
