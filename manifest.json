@@ -4,18 +4,38 @@
   "version": "1.0",
   "manifest_version": 3,
   "action": {
+<<<<<<< HEAD
     "default_popup": "index.html",
+=======
+>>>>>>> 4179036 (creation of first page UI)
     "default_icon": {
-      "16": "sx-logo.png",
-      "48": "sx-logo.png",
-      "128": "sx-logo.png"
+      "16": "xxlogo.png",
+      "48": "xxlogo.png",
+      "128": "xxlogo.png"
     }
   },
+<<<<<<< HEAD
   "content_scripts": [
+=======
+  "background": {
+    "service_worker": "service-worker.ts",
+    "type": "module"
+  },
+  "content_scripts": [ 
+>>>>>>> 4179036 (creation of first page UI)
     {
       "matches": ["http://localhost:3000/*"],
       "js": ["content-script.ts"]
     }
   ],
-  "permissions": ["storage"]
-}
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+} 
