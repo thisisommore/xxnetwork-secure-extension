@@ -103,13 +103,7 @@
         }
         try {
           for (const [key, value] of Object.entries(jsonData)) {
-            await browser.runtime.sendMessage({
-              api: "LocalStorage",
-              action: "setItem",
-              key,
-              value,
-              requestId: Date.now().toString(),
-            });
+            await browser.storage.local.setItem(key, value);
           }
           showToast("Keys imported successfully!", "success");
         } catch (error) {
@@ -160,11 +154,7 @@
       )
     ) {
       try {
-        await browser.runtime.sendMessage({
-          api: "LocalStorage",
-          action: "clear",
-          requestId: Date.now().toString(),
-        });
+        await browser.storage.local.clear();
         showToast("Keys cleared successfully!", "success");
       } catch (error) {
         console.error("Error clearing keys:", error);
