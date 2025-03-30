@@ -17,8 +17,8 @@
   });
 </script>
 
-<main>
-  <div>
+<main style="width: 100%; height: 100%;">
+  <div style="width: 100%; height: 100%;">
     <!-- Hash Router Content -->
     {#if currentRoute === ""}
       <Root />
