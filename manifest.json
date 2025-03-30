@@ -11,12 +11,9 @@
       "128": "sx-logo.png"
     }
   },
-  "background": {
-    "service_worker": "service-worker.ts"
-  },
   "content_scripts": [
     {
-      "matches": ["http://haven.xx.network/*"],
+      "matches": ["http://localhost:3000/*"],
       "js": ["content-script.ts"]
     }
   ],

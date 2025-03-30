@@ -1,46 +1,42 @@
 <script lang="ts">
-  import svelteLogo from "./assets/svelte.svg";
-  import viteLogo from "/vite.svg";
-  import Counter from "./lib/Counter.svelte";
+  import { onMount } from "svelte";
+  import Root from "./routes/+page.svelte";
 
-  const allKeys = $state<Record<string, string | null>>(
-    Object.keys(localStorage)
-      .map((key) => ({
-        [key]: localStorage.getItem(key),
-      }))
-      .reduce((acc, curr) => ({ ...acc, ...curr }), {})
-  );
+  // --- Hash Router Implementation ---
+  // Initialize with the current route or default to "home" if no hash is provided.
+  let currentRoute: string = $state(window.location.hash.slice(1) || "");
 
-  setInterval(() => {
-    Object.keys(localStorage).forEach((key) => {
-      allKeys[key] = localStorage.getItem(key);
-    });
-  }, 1000);
+  // Update the currentRoute whenever the hash changes.
+  const updateRoute = () => {
+    currentRoute = window.location.hash.slice(1) || "home";
+  };
+
+  onMount(() => {
+    window.addEventListener("hashchange", updateRoute);
+    return () => window.removeEventListener("hashchange", updateRoute);
+  });
 </script>
 
 <main>
   <div>
-    <p>Local Storage:</p>
-    {#each Object.keys(allKeys) as key}
-      <div>{key}: {allKeys[key]}</div>
-    {/each}
+    <!-- Hash Router Content -->
+    {#if currentRoute === ""}
+      <Root />
+    {:else if currentRoute === "home"}
+      <section>
+        <h2>Home</h2>
+        <p>Welcome to the Home Page!</p>
+      </section>
+    {:else if currentRoute === "about"}
+      <section>
+        <h2>About</h2>
+        <p>This is the About Page.</p>
+      </section>
+    {:else}
+      <section>
+        <h2>404</h2>
+        <p>Page not found.</p>
+      </section>
+    {/if}
   </div>
 </main>
-
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>
