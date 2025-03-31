@@ -1,6 +1,5 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    export let logoUrl: string;
     const dispatch = createEventDispatcher();
   
     function handleSecureConnection() {
@@ -43,7 +42,7 @@
   </style>
   
   <div class="initial-container">
-    <img class="logo" src={logoUrl} alt="XX Network Logo" />
+    <img class="logo" src="xxlogo.png" alt="XX Network Logo" />
     <button class="secure-button" on:click={handleSecureConnection}>
       Secure Connection
       <svg
