@@ -1,10 +1,10 @@
 <script lang="ts">
-  const { importKeys, exportKeys, clearKeys, blueLogoUrl } = $props();
+  const { importKeys, exportKeys, clearKeys, xxlogo } = $props();
 </script>
 
 <div class="final-container">
   <div class="logo-container">
-    <img class="blue-logo" src={blueLogoUrl} alt="XX Network Blue Logo" />
+    <img class="white-logo" src="xxlogo.png" alt="XX Network  Logo" />
   </div>
   <button class="action-button" on:click={importKeys}> Import Keys </button>
   <button class="action-button" on:click={exportKeys}> Export Keys </button>
@@ -26,9 +26,9 @@
     width: 100%;
     margin: 30px 0;
   }
-  .blue-logo {
-    width: 92px;
-    height: 92px;
+  .white-logo {
+    width: 120px;
+    height: 120px;
     object-fit: contain;
   }
   .action-button {
@@ -37,9 +37,9 @@
     justify-content: center;
     padding: 10px 20px;
     background-color: transparent;
-    border: 2px solid #0db9cb;
+    border: 2px solid #ffffff;
     border-radius: 8px;
-    color: #0db9cb;
+    color: #ffffff;
     font-size: 22px;
     cursor: pointer;
     transition: all 0.3s ease;
