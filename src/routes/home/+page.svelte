@@ -5,17 +5,13 @@
   import LoadingState from "./LoadingState.svelte";
   import FinalState from "./FinalState.svelte";
   import Toast from "./Toast.svelte";
+  import MysticalBackground from "../../lib/MysticalBackground.svelte";
 
   // Define popup states
   type PopupState = "initial" | "loading" | "final";
   let state: PopupState = "initial";
   let visible = true;
-
-  // Logo URLs
-  let logoUrl: string =
-    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48c3R5bGU+LnN0MHtmaWxsOiNmZmZ9PC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjUgMjVsNTAgNTBNNzUgMjVsLTUwIDUwIi8+PHBhdGggZD0iTTIyIDIzbDUgMiA1MCA1MC01IDJNNzggMjNsLTUgMi01MCA1MC41IDIiIGNsYXNzPSJzdDAiLz48L3N2Zz4=";
-  let blueLogoUrl: string =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAYAAADL1t+KAAAACXBIWXMAABYlAAAWJQFJUiTwAAAgAElEQVR4nO3dT3JTV9oH4JuvMhbZgckKcKo0x5loCllBYAUhKwBWAFlBYAVxpprEzFUVs4KGFTRoA3x1yKu0ANtY1pF0z3uep0pFutOtXF05/t3z533PNx8+fBgAgLb9n+8PANon0AEgAYEOAAkIdABIQKADQAICHQASEOgAkIBAB4AEBDoAJCDQASABgQ4ACQh0AEhAoANAAgIdABIQ6ACQgEAHgAQEOgAkINABIAGBDgAJCHQASECgA0ACAh0AEhDoAJCAQAeABAQ6ACQg0AEgAYEOAAkIdABIQKADQAICHQASEOgAkIBAB4AEBDoAJCDQASABgQ4ACQh0AEhAoANAAgIdABIQ6ACQgEAHgAQEOgAkINABIAGBDgAJCHQASECgA0ACAh0AEhDoAJCAQAeABAQ6ACQg0AEgAYEOAAkIdABIQKADQAICHQASEOgAkIBAB4AEBDoAJCDQASABgY2UJe0AAAAmSURBVA4ACQh0AEhAoANAAgIdABIQ6ACQgEAHgAQEOgC0bhiG/wdWIXUe2xKaIgAAAABJRU5ErkJggg==";
+  let logoUrl = "/xxlogo.png";
 
   // Loading state variables
   let fakeButtonText: string = "Extracting KV";
@@ -30,7 +26,7 @@
   function showToast(
     message: string,
     type: ToastType = "info",
-    duration = 3000
+    duration = 3000,
   ) {
     toast = { message, type };
     clearTimeout(toastTimeout);
@@ -41,6 +37,8 @@
 
   function closePopup() {
     visible = false;
+    // Close the extension popup
+    window.close();
   }
 
   // Handle event dispatched from InitialState.svelte
@@ -61,8 +59,10 @@
       } else if (enterCount === 2) {
         fakeButtonText = "Successful";
         hintText = "";
+
         setTimeout(() => {
           state = "final";
+          console.log("Transitioning to final state");
         }, 2000);
       }
     }
@@ -85,29 +85,42 @@
       const target = event.target as HTMLInputElement;
       const file = target.files?.[0];
       if (!file) {
+        console.error("Import failed: No file selected");
         showToast("No file selected", "error");
         return;
       }
       const reader = new FileReader();
       reader.onload = async (e) => {
         if (!e.target?.result) {
+          console.error("Import failed: Could not read file content");
           showToast("Failed to read file content", "error");
           return;
         }
         let jsonData;
         try {
           jsonData = JSON.parse(e.target.result as string);
+          console.log(`Parsed JSON data with ${Object.keys(jsonData).length} keys`);
         } catch (err) {
+          console.error("Import failed: Invalid JSON format", err);
           showToast("Invalid JSON file format", "error");
           return;
         }
         try {
+          let importedCount = 0;
           for (const [key, value] of Object.entries(jsonData)) {
-            await browser.storage.local.setItem(key, value);
+            console.log(`Importing key: ${key}`);
+            try {
+              await browser.storage.local.set({[key]: value});
+              importedCount++;
+            } catch (keyError) {
+              console.error(`Failed to import key: ${key}`, keyError);
+              showToast(`Error importing key: ${key}`, "warning");
+            }
           }
-          showToast("Keys imported successfully!", "success");
+          console.log(`Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`);
+          showToast(`${importedCount} keys imported successfully!`, "success");
         } catch (error) {
-          console.error("Error importing keys:", error);
+          console.error("Error during import process:", error);
           showToast("Error importing keys", "error");
         }
       };
@@ -118,10 +131,19 @@
 
   async function exportKeys() {
     try {
+      console.log("Starting keys export process");
       let allData = {};
       if (browser && browser.storage && browser.storage.local) {
         allData = await browser.storage.local.get(null);
+        const keyCount = Object.keys(allData).length;
+        console.log(`Retrieved ${keyCount} keys from storage`);
+        if (keyCount === 0) {
+          console.warn("No keys found to export");
+          showToast("No keys found to export", "warning");
+          return;
+        }
       } else {
+        console.error("Export failed: Extension storage API not available");
         throw new Error("Extension storage API not available");
       }
       const jsonString = JSON.stringify(allData, null, 2);
@@ -140,6 +162,7 @@
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+      console.log(`Successfully exported ${Object.keys(allData).length} keys`);
       showToast("Keys exported successfully!", "success");
     } catch (error) {
       console.error("Error exporting keys:", error);
@@ -148,30 +171,41 @@
   }
 
   async function clearKeys() {
+    console.log("Clear keys requested - waiting for user confirmation");
     if (
       confirm(
-        "Are you sure you want to clear all keys? This action cannot be undone."
+        "Are you sure you want to clear all keys? This action cannot be undone.",
       )
     ) {
+      console.log("User confirmed clearing all keys");
       try {
+        // Get current key count before clearing for logging purposes
+        const allData = await browser.storage.local.get(null);
+        const keyCount = Object.keys(allData).length;
+        
         await browser.storage.local.clear();
+        
+        console.log(`Successfully cleared ${keyCount} keys from storage`);
         showToast("Keys cleared successfully!", "success");
       } catch (error) {
         console.error("Error clearing keys:", error);
         showToast("Error clearing keys", "error");
       }
+    } else {
+      console.log("User cancelled clearing keys");
     }
   }
 
   function getBackgroundStyle(state: PopupState): string {
     return state === "final"
       ? "linear-gradient(180deg, #B5EDF3 0%, #FFFFFF 100%)"
-      : "linear-gradient(180deg, #0DB9CB 0%, #88DCE5 67%)";
+      : "transparent";
   }
 </script>
 
 {#if visible}
   <div id="xx-network-popup" style="background: {getBackgroundStyle(state)};">
+    <MysticalBackground />
     <!-- Close Button -->
     <div class="close-button" on:click={closePopup}>✕</div>
     <div style="padding: 20px; height: calc(100% - 40px);">
@@ -180,7 +214,7 @@
       {:else if state === "loading"}
         <LoadingState {fakeButtonText} {hintText} />
       {:else if state === "final"}
-        <FinalState {blueLogoUrl} {importKeys} {exportKeys} {clearKeys} />
+        <FinalState {importKeys} {exportKeys} {clearKeys} />
       {/if}
     </div>
   </div>
@@ -202,6 +236,7 @@
     overflow-y: auto;
     font-family: Arial, sans-serif;
     color: #ffffff;
+    position: relative;
   }
   .close-button {
     position: absolute;
