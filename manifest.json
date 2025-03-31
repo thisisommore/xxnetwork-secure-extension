@@ -6,9 +6,9 @@
   "action": {
     "default_popup": "index.html",
     "default_icon": {
-      "16": "sx-logo.png",
-      "48": "sx-logo.png",
-      "128": "sx-logo.png"
+      "16": "16xxlogo.png",
+      "48": "48xxlogo.png",
+      "128": "128xxlogo.png"
     }
   },
   "content_scripts": [
