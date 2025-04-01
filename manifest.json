@@ -4,30 +4,18 @@
   "version": "1.0",
   "manifest_version": 3,
   "action": {
+    "default_popup": "index.html",
     "default_icon": {
       "16": "16xxlogo.png",
       "48": "48xxlogo.png",
       "128": "128xxlogo.png"
     }
   },
-  "background": {
-    "service_worker": "service-worker.ts",
-    "type": "module"
-  },
-  "content_scripts": [ 
+  "content_scripts": [
     {
-      "matches": ["http://haven.xx.network/*"],
+      "matches": ["http://localhost:3000/*"],
       "js": ["content-script.ts"]
     }
   ],
-  "permissions": [
-    "storage",
-    "scripting",
-    "activeTab",
-    "tabs"
-  ],
-
-  "host_permissions": [
-    "https://haven.xx.network/*"
-  ]
-} 
+  "permissions": ["storage"]
+}
