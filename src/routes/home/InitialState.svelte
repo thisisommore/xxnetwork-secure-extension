@@ -1,13 +1,13 @@
 <script lang="ts">
-  const { logoUrl, secure } = $props<{ logoUrl: string; secure: () => void }>();
-  function handleSecureConnection() {
-    secure();
-  }
+  type Props = {
+    secure: () => void;
+  };
+  const { secure }: Props = $props();
 </script>
 
 <div class="initial-container">
   <img class="logo" src="xxlogo.png" alt="XX Network Logo" />
-  <button class="secure-button" onclick={handleSecureConnection}>
+  <button class="secure-button" onclick={secure}>
     Secure Connection
     <svg
       xmlns="http://www.w3.org/2000/svg"
