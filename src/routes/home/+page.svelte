@@ -26,7 +26,7 @@
   function showToast(
     message: string,
     type: ToastType = "info",
-    duration = 3000,
+    duration = 3000
   ) {
     toast = { message, type };
     clearTimeout(toastTimeout);
@@ -99,7 +99,9 @@
         let jsonData;
         try {
           jsonData = JSON.parse(e.target.result as string);
-          console.log(`Parsed JSON data with ${Object.keys(jsonData).length} keys`);
+          console.log(
+            `Parsed JSON data with ${Object.keys(jsonData).length} keys`
+          );
         } catch (err) {
           console.error("Import failed: Invalid JSON format", err);
           showToast("Invalid JSON file format", "error");
@@ -110,14 +112,16 @@
           for (const [key, value] of Object.entries(jsonData)) {
             console.log(`Importing key: ${key}`);
             try {
-              await browser.storage.local.set({[key]: value});
+              await browser.storage.local.set({ [key]: value });
               importedCount++;
             } catch (keyError) {
               console.error(`Failed to import key: ${key}`, keyError);
               showToast(`Error importing key: ${key}`, "warning");
             }
           }
-          console.log(`Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`);
+          console.log(
+            `Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`
+          );
           showToast(`${importedCount} keys imported successfully!`, "success");
         } catch (error) {
           console.error("Error during import process:", error);
@@ -174,7 +178,7 @@
     console.log("Clear keys requested - waiting for user confirmation");
     if (
       confirm(
-        "Are you sure you want to clear all keys? This action cannot be undone.",
+        "Are you sure you want to clear all keys? This action cannot be undone."
       )
     ) {
       console.log("User confirmed clearing all keys");
@@ -182,9 +186,9 @@
         // Get current key count before clearing for logging purposes
         const allData = await browser.storage.local.get(null);
         const keyCount = Object.keys(allData).length;
-        
+
         await browser.storage.local.clear();
-        
+
         console.log(`Successfully cleared ${keyCount} keys from storage`);
         showToast("Keys cleared successfully!", "success");
       } catch (error) {
@@ -207,10 +211,10 @@
   <div id="xx-network-popup" style="background: {getBackgroundStyle(state)};">
     <MysticalBackground />
     <!-- Close Button -->
-    <div class="close-button" on:click={closePopup}>✕</div>
+    <div class="close-button" onclick={closePopup}>✕</div>
     <div style="padding: 20px; height: calc(100% - 40px);">
       {#if state === "initial"}
-        <InitialState {logoUrl} on:secure={handleSecure} />
+        <InitialState {logoUrl} secure={handleSecure} />
       {:else if state === "loading"}
         <LoadingState {fakeButtonText} {hintText} />
       {:else if state === "final"}

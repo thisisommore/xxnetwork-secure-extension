@@ -1,14 +1,14 @@
 <script lang="ts">
-  const { importKeys, exportKeys, clearKeys, xxlogo } = $props();
+  const { importKeys, exportKeys, clearKeys } = $props();
 </script>
 
 <div class="final-container">
   <div class="logo-container">
     <img class="white-logo" src="xxlogo.png" alt="XX Network  Logo" />
   </div>
-  <button class="action-button" on:click={importKeys}> Import Keys </button>
-  <button class="action-button" on:click={exportKeys}> Export Keys </button>
-  <button class="action-button" on:click={clearKeys}> Clear Keys </button>
+  <button class="action-button" onclick={importKeys}> Import Keys </button>
+  <button class="action-button" onclick={exportKeys}> Export Keys </button>
+  <button class="action-button" onclick={clearKeys}> Clear Keys </button>
 </div>
 
 <style>
