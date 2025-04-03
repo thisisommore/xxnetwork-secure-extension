@@ -1,10 +1,8 @@
 <script lang="ts">
   import XxNetworkPopup from "./XXNetworkPopup.svelte";
 
-  const {
-    fakeButtonText,
-    hintText,
-  }: { fakeButtonText: string; hintText: string } = $props();
+  const { actionText, hintText }: { actionText: string; hintText?: string } =
+    $props();
 </script>
 
 <XxNetworkPopup style="gradient">
@@ -40,7 +38,7 @@
   </div>
   <div class="loading-container">
     <div class="fake-button">
-      {fakeButtonText}
+      {actionText}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

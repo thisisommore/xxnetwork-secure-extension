@@ -8,16 +8,23 @@
   import MysticalBackground from "../../lib/MysticalBackground.svelte";
   import XxNetworkPopup from "../../lib/XXNetworkPopup.svelte";
 
-  let visible = true;
-
   // Loading state variables
-  let fakeButtonText: string = "Extracting KV";
-  let hintText: string = "Press Enter to continue";
-  let enterCount = 0;
+  let actionText:
+    | "Extracting KV"
+    | "Clearing Local Storage"
+    | "Exporting Keys"
+    | "Importing Keys"
+    | "" = $state("");
+
+  const stopLoading = () => {
+    setTimeout(() => {
+      actionText = "";
+    }, 1000);
+  };
 
   // Toast state
   type ToastType = "info" | "success" | "error" | "warning";
-  let toast: { message: string; type: ToastType } | null = null;
+  let toast: { message: string; type: ToastType } | null = $state(null);
   let toastTimeout: ReturnType<typeof setTimeout>;
 
   function showToast(
@@ -34,11 +41,13 @@
 
   // Final state functions
   async function importKeys() {
+    actionText = "Importing Keys";
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "application/json";
     fileInput.onchange = async (event: Event) => {
       const target = event.target as HTMLInputElement;
+
       const file = target.files?.[0];
       if (!file) {
         console.error("Import failed: No file selected");
@@ -50,6 +59,7 @@
         if (!e.target?.result) {
           console.error("Import failed: Could not read file content");
           showToast("Failed to read file content", "error");
+          stopLoading();
           return;
         }
         let jsonData;
@@ -61,6 +71,7 @@
         } catch (err) {
           console.error("Import failed: Invalid JSON format", err);
           showToast("Invalid JSON file format", "error");
+          stopLoading();
           return;
         }
         try {
@@ -82,14 +93,21 @@
         } catch (error) {
           console.error("Error during import process:", error);
           showToast("Error importing keys", "error");
+        } finally {
+          stopLoading();
         }
       };
       reader.readAsText(file);
+    };
+
+    fileInput.oncancel = () => {
+      stopLoading();
     };
     fileInput.click();
   }
 
   async function exportKeys() {
+    actionText = "Exporting Keys";
     try {
       console.log("Starting keys export process");
       let allData = {};
@@ -100,6 +118,7 @@
         if (keyCount === 0) {
           console.warn("No keys found to export");
           showToast("No keys found to export", "warning");
+          stopLoading();
           return;
         }
       } else {
@@ -128,9 +147,11 @@
       console.error("Error exporting keys:", error);
       showToast("Error exporting keys", "error");
     }
+    stopLoading();
   }
 
   async function clearKeys() {
+    actionText = "Clearing Local Storage";
     console.log("Clear keys requested - waiting for user confirmation");
     if (
       confirm(
@@ -154,10 +175,13 @@
     } else {
       console.log("User cancelled clearing keys");
     }
+    stopLoading();
   }
 </script>
 
-{#if visible}
+{#if actionText !== ""}
+  <LoadingState {actionText} />
+{:else}
   <XxNetworkPopup style={"gradient"}>
     <MysticalBackground />
 

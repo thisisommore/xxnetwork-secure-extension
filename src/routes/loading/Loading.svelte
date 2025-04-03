@@ -17,8 +17,4 @@
   });
 </script>
 
-<p>Loading...</p>
-<LoadingState
-  fakeButtonText="Extracting KV"
-  hintText="Press Enter to continue"
-/>
+<LoadingState actionText="Extracting KV" hintText="Press Enter to continue" />
