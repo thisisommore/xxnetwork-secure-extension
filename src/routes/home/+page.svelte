@@ -214,7 +214,7 @@
     <div class="close-button" onclick={closePopup}>✕</div>
     <div style="padding: 20px; height: calc(100% - 40px);">
       {#if state === "initial"}
-        <InitialState {logoUrl} secure={handleSecure} />
+        <InitialState secure={handleSecure} />
       {:else if state === "loading"}
         <LoadingState {fakeButtonText} {hintText} />
       {:else if state === "final"}
