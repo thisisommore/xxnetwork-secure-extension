@@ -1,17 +1,14 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import browser from "webextension-polyfill";
-  import InitialState from "./InitialState.svelte";
-  import LoadingState from "./LoadingState.svelte";
+  import InitialState from "../../Index.svelte";
+  import LoadingState from "../../lib/LoadingState.svelte";
   import FinalState from "./FinalState.svelte";
   import Toast from "./Toast.svelte";
   import MysticalBackground from "../../lib/MysticalBackground.svelte";
+  import XxNetworkPopup from "../../lib/XXNetworkPopup.svelte";
 
-  // Define popup states
-  type PopupState = "initial" | "loading" | "final";
-  let state: PopupState = "initial";
   let visible = true;
-  let logoUrl = "/xxlogo.png";
 
   // Loading state variables
   let fakeButtonText: string = "Extracting KV";
@@ -34,47 +31,6 @@
       toast = null;
     }, duration);
   }
-
-  function closePopup() {
-    visible = false;
-    // Close the extension popup
-    window.close();
-  }
-
-  // Handle event dispatched from InitialState.svelte
-  function handleSecure() {
-    state = "loading";
-    enterCount = 0;
-    fakeButtonText = "Extracting KV";
-    hintText = "Press Enter to continue";
-  }
-
-  // Global keydown handler (for the loading state)
-  function handleKeydown(event: KeyboardEvent) {
-    if (state === "loading" && event.key === "Enter") {
-      enterCount++;
-      if (enterCount === 1) {
-        fakeButtonText = "Clearing Local Storage";
-        hintText = "Press Enter to continue";
-      } else if (enterCount === 2) {
-        fakeButtonText = "Successful";
-        hintText = "";
-
-        setTimeout(() => {
-          state = "final";
-          console.log("Transitioning to final state");
-        }, 2000);
-      }
-    }
-  }
-
-  onMount(() => {
-    window.addEventListener("keydown", handleKeydown);
-  });
-
-  onDestroy(() => {
-    window.removeEventListener("keydown", handleKeydown);
-  });
 
   // Final state functions
   async function importKeys() {
@@ -199,60 +155,18 @@
       console.log("User cancelled clearing keys");
     }
   }
-
-  function getBackgroundStyle(state: PopupState): string {
-    return state === "final"
-      ? "linear-gradient(180deg, #B5EDF3 0%, #FFFFFF 100%)"
-      : "transparent";
-  }
 </script>
 
 {#if visible}
-  <div id="xx-network-popup" style="background: {getBackgroundStyle(state)};">
+  <XxNetworkPopup style={"gradient"}>
     <MysticalBackground />
-    <!-- Close Button -->
-    <div class="close-button" onclick={closePopup}>✕</div>
-    <div style="padding: 20px; height: calc(100% - 40px);">
-      {#if state === "initial"}
-        <InitialState secure={handleSecure} />
-      {:else if state === "loading"}
-        <LoadingState {fakeButtonText} {hintText} />
-      {:else if state === "final"}
-        <FinalState {importKeys} {exportKeys} {clearKeys} />
-      {/if}
-    </div>
-  </div>
-{/if}
 
-<svelte:window on:keydown={handleKeydown} />
+    <div style="padding: 20px; height: calc(100% - 40px);">
+      <FinalState {importKeys} {exportKeys} {clearKeys} />
+    </div>
+  </XxNetworkPopup>
+{/if}
 
 {#if toast}
   <Toast {toast} />
 {/if}
-
-<style>
-  #xx-network-popup {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    z-index: 9999999;
-    overflow-y: auto;
-    font-family: Arial, sans-serif;
-    color: #ffffff;
-    position: relative;
-  }
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    text-align: center;
-    line-height: 24px;
-    cursor: pointer;
-    z-index: 10000000;
-  }
-</style>

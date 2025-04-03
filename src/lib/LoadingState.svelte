@@ -1,41 +1,13 @@
 <script lang="ts">
-    export let fakeButtonText: string;
-    export let hintText: string;
-  </script>
-  
-  <style>
-    .spinner-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 250px;
-    }
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 30px;
-    }
-    .fake-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 20px;
-      background-color: transparent;
-      border: 2px solid white;
-      border-radius: 8px;
-      color: white;
-      font-size: 25px;
-      width: fit-content;
-    }
-    .hint {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.7);
-    }
-  </style>
-  
+  import XxNetworkPopup from "./XXNetworkPopup.svelte";
+
+  const {
+    fakeButtonText,
+    hintText,
+  }: { fakeButtonText: string; hintText: string } = $props();
+</script>
+
+<XxNetworkPopup style="gradient">
   <div class="spinner-container">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -89,3 +61,37 @@
       <div class="hint">{hintText}</div>
     {/if}
   </div>
+</XxNetworkPopup>
+
+<style>
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+  }
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+  }
+  .fake-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 8px;
+    color: white;
+    font-size: 25px;
+    width: fit-content;
+  }
+  .hint {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+</style>
