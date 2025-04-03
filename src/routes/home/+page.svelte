@@ -30,7 +30,7 @@
   function showToast(
     message: string,
     type: ToastType = "info",
-    duration = 3000
+    duration = 3000,
   ) {
     toast = { message, type };
     clearTimeout(toastTimeout);
@@ -66,7 +66,7 @@
         try {
           jsonData = JSON.parse(e.target.result as string);
           console.log(
-            `Parsed JSON data with ${Object.keys(jsonData).length} keys`
+            `Parsed JSON data with ${Object.keys(jsonData).length} keys`,
           );
         } catch (err) {
           console.error("Import failed: Invalid JSON format", err);
@@ -87,7 +87,7 @@
             }
           }
           console.log(
-            `Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`
+            `Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`,
           );
           showToast(`${importedCount} keys imported successfully!`, "success");
         } catch (error) {
@@ -155,7 +155,7 @@
     console.log("Clear keys requested - waiting for user confirmation");
     if (
       confirm(
-        "Are you sure you want to clear all keys? This action cannot be undone."
+        "Are you sure you want to clear all keys? This action cannot be undone.",
       )
     ) {
       console.log("User confirmed clearing all keys");

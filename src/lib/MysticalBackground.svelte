@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy } from "svelte";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -27,42 +27,54 @@
         size: Math.random() * PARTICLE_SIZE + 10,
         speedX: (Math.random() - 0.5) * PARTICLE_SPEED,
         speedY: (Math.random() - 0.5) * PARTICLE_SPEED,
-        opacity: Math.random() * PARTICLE_OPACITY
+        opacity: Math.random() * PARTICLE_OPACITY,
       });
     }
   }
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     // Draw gradient background
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, '#000000');
-    gradient.addColorStop(0.5, '#0A192F');
-    gradient.addColorStop(1, '#000000');
+    gradient.addColorStop(0, "#000000");
+    gradient.addColorStop(0.5, "#0A192F");
+    gradient.addColorStop(1, "#000000");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Add blur effect
-    ctx.filter = 'blur(20px)';
-    
+    ctx.filter = "blur(20px)";
+
     // Update and draw particles
-    particles.forEach(particle => {
+    particles.forEach((particle) => {
       // Update position
       particle.x += particle.speedX;
       particle.y += particle.speedY;
 
       // Bounce off edges
-      if (particle.x - particle.size < 0 || particle.x + particle.size > canvas.width) {
+      if (
+        particle.x - particle.size < 0 ||
+        particle.x + particle.size > canvas.width
+      ) {
         particle.speedX *= -1;
       }
-      if (particle.y - particle.size < 0 || particle.y + particle.size > canvas.height) {
+      if (
+        particle.y - particle.size < 0 ||
+        particle.y + particle.size > canvas.height
+      ) {
         particle.speedY *= -1;
       }
 
       // Keep particles within bounds
-      particle.x = Math.max(particle.size, Math.min(canvas.width - particle.size, particle.x));
-      particle.y = Math.max(particle.size, Math.min(canvas.height - particle.size, particle.y));
+      particle.x = Math.max(
+        particle.size,
+        Math.min(canvas.width - particle.size, particle.x),
+      );
+      particle.y = Math.max(
+        particle.size,
+        Math.min(canvas.height - particle.size, particle.y),
+      );
 
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
@@ -71,7 +83,7 @@
     });
 
     // Reset filter
-    ctx.filter = 'none';
+    ctx.filter = "none";
 
     animationFrame = requestAnimationFrame(animate);
   }
@@ -83,14 +95,14 @@
   }
 
   onMount(() => {
-    ctx = canvas.getContext('2d')!;
+    ctx = canvas.getContext("2d")!;
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     animate();
   });
 
   onDestroy(() => {
-    window.removeEventListener('resize', handleResize);
+    window.removeEventListener("resize", handleResize);
     cancelAnimationFrame(animationFrame);
   });
 </script>
@@ -104,4 +116,4 @@
   canvas {
     pointer-events: none;
   }
-</style> 
+</style>
