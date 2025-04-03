@@ -4,13 +4,10 @@ import webExtension from "vite-plugin-web-extension";
 import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    svelte(), 
-    webExtension(),
-  ],
+  plugins: [svelte(), webExtension()],
   resolve: {
     alias: {
-      $lib: path.resolve('./src/lib')
-    }
-  }
+      $lib: path.resolve("./src/lib"),
+    },
+  },
 });
