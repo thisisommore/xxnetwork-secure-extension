@@ -1,10 +1,13 @@
 <script lang="ts">
+  import Index from "./Index.svelte";
   import Router from "./lib/Router.svelte";
   import Home from "./routes/home/+page.svelte";
-
+  import Loading from "./routes/loading/Loading.svelte";
   // Define routes for the router as an object with path keys and component values
   const routes = {
-    "": Home,
+    "": Index,
+    loading: Loading,
+    home: Home,
     // Add more routes here as needed
   };
 </script>
