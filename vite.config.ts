@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [svelte(), webExtension()],
   resolve: {
     alias: {
-      $lib: path.resolve("./src/lib"),
+      $components: path.resolve("./src/components"),
     },
   },
 });

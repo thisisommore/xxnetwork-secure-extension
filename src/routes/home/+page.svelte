@@ -2,11 +2,11 @@
   import { onMount, onDestroy } from "svelte";
   import browser from "webextension-polyfill";
   import InitialState from "../../+page.svelte";
-  import LoadingState from "../../lib/LoadingState.svelte";
+  import LoadingState from "$components/LoadingState.svelte";
   import FinalState from "./FinalState.svelte";
   import Toast from "./Toast.svelte";
-  import MysticalBackground from "../../lib/MysticalBackground.svelte";
-  import XxNetworkPopup from "../../lib/XXNetworkPopup.svelte";
+  import MysticalBackground from "$components/MysticalBackground.svelte";
+  import XxNetworkPopup from "$components/XXNetworkPopup.svelte";
 
   // Loading state variables
   let actionText:

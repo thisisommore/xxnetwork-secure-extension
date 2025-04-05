@@ -1,5 +1,5 @@
 <script lang="ts">
-  import XXNetworkPopup from "./lib/XXNetworkPopup.svelte";
+  import XXNetworkPopup from "$components/XXNetworkPopup.svelte";
   const secure = () => {
     window.location.hash = "#loading";
   };
