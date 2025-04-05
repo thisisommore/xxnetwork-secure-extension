@@ -42,6 +42,11 @@ export default ts.config(
     rules: {
       // Override or add rule settings here, such as:
       // 'svelte/rule-name': 'error'
+      // ts import type as type
+      "@typescript-eslint/consistent-type-imports": "error",
     },
+  },
+  {
+    ignores: ["dist/**"],
   },
 );
