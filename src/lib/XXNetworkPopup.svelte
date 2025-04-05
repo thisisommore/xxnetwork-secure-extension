@@ -49,6 +49,6 @@
     z-index: 10000000;
     color: white;
     font-size: 10px;
-    border:none;
+    border: none;
   }
 </style>
