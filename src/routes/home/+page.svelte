@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import browser from "webextension-polyfill";
-  import InitialState from "../../Index.svelte";
+  import InitialState from "../../+page.svelte";
   import LoadingState from "../../lib/LoadingState.svelte";
   import FinalState from "./FinalState.svelte";
   import Toast from "./Toast.svelte";
