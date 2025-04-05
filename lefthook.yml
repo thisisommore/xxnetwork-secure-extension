@@ -1,5 +1,9 @@
 pre-commit:
-  parallel: true
+  parallel: false
   jobs:
-    - run: npx prettier --write {staged_files} && git add {staged_files}
+    - name: prettier
+      run: npx prettier --write {staged_files} && git add {staged_files}
+      glob: "src/**/*.{js,ts,svelte,json,css,html}"
+    - name: eslint
+      run: pnpm dlx eslint --fix {staged_files} && git add {staged_files}
       glob: "src/**/*.{js,ts,svelte,json,css,html}"
