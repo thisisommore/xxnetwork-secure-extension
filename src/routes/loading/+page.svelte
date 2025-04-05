@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LoadingState from "../../lib/LoadingState.svelte";
+  import LoadingState from "$components/LoadingState.svelte";
 
   // Global keydown handler (for the loading state)
   function handleKeydown(event: KeyboardEvent) {
