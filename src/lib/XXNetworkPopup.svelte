@@ -21,7 +21,7 @@
   <MysticalBackground />
   <Children />
   <!-- Close Button -->
-  <div class="close-button" onclick={closePopup}>✕</div>
+  <button class="close-button" onclick={closePopup}>✕</button>
 </div>
 
 <style>
@@ -45,8 +45,10 @@
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.1);
     text-align: center;
-    line-height: 24px;
     cursor: pointer;
     z-index: 10000000;
+    color: white;
+    font-size: 10px;
+    border:none;
   }
 </style>
