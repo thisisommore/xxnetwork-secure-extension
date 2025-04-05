@@ -46,7 +46,7 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="4"
+        stroke-width="3"
         stroke-linecap="round"
         stroke-linejoin="round"
         style="margin-left: 8px;"
@@ -73,6 +73,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 30px;
+    padding: 30px;
   }
   .fake-button {
     display: flex;
@@ -83,7 +84,7 @@
     border: 2px solid white;
     border-radius: 8px;
     color: white;
-    font-size: 25px;
+    font-size: 18px;
     width: fit-content;
   }
   .hint {
