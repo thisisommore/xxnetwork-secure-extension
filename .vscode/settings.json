@@ -1,0 +1,11 @@
+// https://github.com/sveltejs/eslint-plugin-svelte?tab=readme-ov-file#editor-integrations
+{
+    "eslint.validate": [
+      // Defaults
+      "javascript",
+      "javascriptreact",
+
+      // Svelte
+      "svelte"
+    ]
+  }
