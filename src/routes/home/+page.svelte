@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
   import browser from "webextension-polyfill";
-  import InitialState from "../../+page.svelte";
   import LoadingState from "$components/LoadingState.svelte";
   import FinalState from "./FinalState.svelte";
   import Toast from "./Toast.svelte";
@@ -182,7 +180,7 @@
 {#if actionText !== ""}
   <LoadingState {actionText} />
 {:else}
-  <XxNetworkPopup style={"gradient"}>
+  <XxNetworkPopup style="gradient">
     <MysticalBackground />
 
     <div style="padding: 20px; height: calc(100% - 40px);">
