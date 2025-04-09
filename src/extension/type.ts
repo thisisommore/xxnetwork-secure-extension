@@ -1,25 +1,18 @@
-type FunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends Function ? K : never;
-}[keyof T];
+type BaseLocalStorageMessage = {
+  api: "LocalStorage";
+  key: string;
+  requestId: string;
+};
 
-//TODO extract functions from localStorage - type
-//TODO TMessage uses duplicate for type props
 export type TMessage =
-  | {
-      api: "LocalStorage";
+  | (BaseLocalStorageMessage & {
       action: "getItem" | "removeItem" | "clear";
-      key: string;
-      requestId: string;
-    }
-  | {
-      api: "LocalStorage";
+    })
+  | (BaseLocalStorageMessage & {
       action: "setItem";
-      key: string;
       value: string;
-      requestId: string;
-    };
+    });
 
-//TODO: maybe req id to track?
 export type TResponse = {
   api: "LocalStorage:Response";
   action: "getItem" | "removeItem" | "clear" | "setItem";
