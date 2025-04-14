@@ -46,10 +46,10 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="3"
+        stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
-        style="margin-left: 8px;"
+        class="icon"
       >
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
         <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
@@ -66,31 +66,48 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 250px;
+    height: 310px;
   }
   .loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
-    padding: 30px;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
   .fake-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 12px 25px;
+    margin: 10px 20px;
     background-color: transparent;
     border: 2px solid white;
     border-radius: 8px;
     color: white;
-    font-size: 18px;
+    font-size: 25px;
     width: fit-content;
+    min-width: 240px;
+    min-height: 60px;
+    box-sizing: border-box;
+    text-align: center;
+    word-wrap: break-word;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .fake-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
   .hint {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.7);
+  }
+  .icon {
+    margin-left: 8px;
   }
 </style>
