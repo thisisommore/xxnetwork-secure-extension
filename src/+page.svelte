@@ -35,6 +35,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 30px;
+    padding-bottom: 20px;
   }
   .logo {
     max-width: 250px;
@@ -45,7 +46,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 12px 25px;
+    margin: 10px 20px;
     background-color: transparent;
     border: 2px solid white;
     border-radius: 8px;
@@ -54,6 +56,11 @@
     cursor: pointer;
     transition: all 0.3s ease;
     width: fit-content;
+    min-width: 240px;
+    min-height: 60px;
+    box-sizing: border-box;
+    text-align: center;
+    word-wrap: break-word;
   }
   .secure-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
