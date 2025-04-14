@@ -1,47 +1,109 @@
-# Svelte + TS + Vite
+# XX Network Secure Extension
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A browser extension that enhances security when interacting with xx.network applications, specifically designed to work with [Haven](https://haven.xx.network/), the xx.network chat application.
 
-## Recommended IDE Setup
+## What is This Extension?
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+This secure extension serves as a security layer for xx.network applications, providing:
 
-## Need an official Svelte framework?
+- Secure key-value (KV) data storage for Haven chat
+- The ability to import, export, and wipe your KV data
+- Enhanced data persistence and portability across browsers
+- A more secure alternative to Haven's default browser local storage
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## How It Works
 
-## Technical considerations
+The extension works hand-in-hand with the Haven chat application (https://haven.xx.network/):
 
-**Why use this over SvelteKit?**
+1. By default, Haven uses your browser's local storage to store key-value (KV) data
+2. This extension allows you to store that KV data in the extension's storage instead
+3. Your data becomes portable - you can import/export KV data between browsers or devices
+4. You gain the ability to completely wipe your KV data when needed
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+The extension uses secure browser extension APIs to handle sensitive data and provides a simple user interface to manage your stored information.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+## Key Features
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+- **Secure Storage**: Move KV data from browser local storage to more secure extension storage
+- **Data Portability**: Import and export your KV data between browsers or devices
+- **Data Control**: Easily wipe your data when needed
+- **Seamless Integration**: Works directly with Haven chat with minimal configuration
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+## Installation
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+### For Users
 
-**Why include `.vscode/extensions.json`?**
+1. Clone this repository:
+   ```
+   git clone https://github.com/xx-network/xxnetwork-secure-extension.git
+   ```
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+2. Build the extension:
+   ```
+   cd xxnetwork-secure-extension
+   pnpm install
+   pnpm build
+   ```
 
-**Why enable `allowJs` in the TS template?**
+3. Load the extension in your browser:
+   - Chrome/Edge:
+     - Go to `chrome://extensions/`
+     - Enable "Developer mode"
+     - Click "Load unpacked"
+     - Select the `dist` folder from this project
+   - Firefox:
+     - Go to `about:debugging#/runtime/this-firefox`
+     - Click "Load Temporary Add-on..."
+     - Select any file in the `dist` folder
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+4. Visit [Haven](https://haven.xx.network/) and the extension will automatically integrate with it
 
-**Why is HMR not preserving my local component state?**
+### For Developers
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+1. Clone the repository
+   ```
+   git clone https://github.com/xx-network/xxnetwork-secure-extension.git
+   ```
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+2. Install dependencies
+   ```
+   cd xxnetwork-secure-extension
+   pnpm install
+   ```
 
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+3. Start the development server
+   ```
+   pnpm dev
+   ```
+
+4. Load the extension in your browser from the `dist` folder as described above
+
+## Development Workflow
+
+This project uses:
+- Svelte 5 for UI components
+- TypeScript for type safety
+- Vite for fast builds
+- ESLint and Prettier for code quality
+- Lefthook for git hooks
+
+Useful commands:
+- `pnpm dev` - Run development server
+- `pnpm build` - Build for production
+- `pnpm preview` - Preview production build
+- `pnpm check` - Type check the codebase
+
+## Structure
+
+- `/src` - Source code
+  - `/components` - Reusable Svelte components
+  - `/extension` - Extension-specific code
+  - `/routes` - Page routes
+- `/public` - Static assets
+- `/dist` - Build output
+
+
+
+
+
+
