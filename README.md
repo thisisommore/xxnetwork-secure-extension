@@ -51,7 +51,7 @@ The extension uses secure browser extension APIs to handle sensitive data and pr
      - Enable "Developer mode"
      - Click "Load unpacked"
      - Select the `dist` folder from this project
-   - Firefox:
+   - Firefox (WIP):
      - Go to `about:debugging#/runtime/this-firefox`
      - Click "Load Temporary Add-on..."
      - Select any file in the `dist` folder
