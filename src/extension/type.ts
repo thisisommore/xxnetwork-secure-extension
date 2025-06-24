@@ -6,7 +6,7 @@ type BaseLocalStorageMessage = {
 
 export type TMessage =
   | (BaseLocalStorageMessage & {
-      action: "getItem" | "removeItem" | "clear";
+      action: "getItem" | "removeItem" | "clear" | "keys";
     })
   | (BaseLocalStorageMessage & {
       action: "setItem";
@@ -15,7 +15,7 @@ export type TMessage =
 
 export type TResponse = {
   api: "LocalStorage:Response";
-  action: "getItem" | "removeItem" | "clear" | "setItem";
+  action: "getItem" | "removeItem" | "clear" | "setItem" | "keys";
   result?: unknown;
   requestId: string;
 };
