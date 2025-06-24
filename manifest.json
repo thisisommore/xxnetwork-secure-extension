@@ -17,5 +17,11 @@
       "js": ["src/extension/content-script.ts"]
     }
   ],
-  "permissions": ["storage"]
+  "externally_connectable": {
+    "matches": ["http://localhost:3000/*"]
+  },
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "src/extension/service-worker.ts"
+  }
 }
