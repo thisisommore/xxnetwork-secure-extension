@@ -1,10 +1,10 @@
 // src/extension/service-worker.ts
 import browser from "webextension-polyfill";
-import type { TMessage, TResponse } from "./type";
+import type { TRequest, TResponse } from "./type";
 
 console.log("service-worker ready");
 
-const processMessage = async (msg: TMessage): Promise<TResponse> => {
+const processMessage = async (msg: TRequest): Promise<TResponse> => {
   switch (msg.action) {
     case "clear":
       await browser.storage.local.clear();
@@ -70,7 +70,7 @@ browser.runtime.onConnectExternal.addListener((port) => {
   console.log("Port connected:", port.name);
 
   port.onMessage.addListener(async (message: unknown) => {
-    const msg = message as TMessage;
+    const msg = message as TRequest;
     const response = await processMessage(msg);
     port.postMessage(response);
   });
