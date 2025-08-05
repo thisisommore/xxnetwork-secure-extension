@@ -1,35 +1,36 @@
-type Message<T extends string> = {
-  api: T;
+// type from Extension
+type BaseMessage<Api extends string> = {
+  api: Api;
   requestId: string;
 };
 
-type BaseLocalStorageRequest = Message<"LocalStorage:Request">;
+export type TRequest = BaseMessage<"LocalStorage:Request"> &
+  (
+    | {
+        action: "clear" | "keys";
+      }
+    | {
+        action: "getItem" | "removeItem";
+        key: string;
+      }
+    | {
+        action: "setItem";
+        key: string;
+        value: string;
+      }
+  );
 
-export type TRequest =
-  | (BaseLocalStorageRequest & {
-      action: "clear" | "keys";
-    })
-  | (BaseLocalStorageRequest & {
-      action: "getItem" | "removeItem";
-      key: string;
-    })
-  | (BaseLocalStorageRequest & {
-      action: "setItem";
-      key: string;
-      value: string;
-    });
-
-type BaseLocalStorageResponse = Message<"LocalStorage:Response">;
-
-export type TResponse =
-  | (BaseLocalStorageResponse & {
-      action: "getItem";
-      result: unknown;
-    })
-  | (BaseLocalStorageResponse & {
-      action: "keys";
-      result: string[];
-    })
-  | (BaseLocalStorageResponse & {
-      action: "removeItem" | "clear" | "setItem";
-    });
+export type TResponse = BaseMessage<"LocalStorage:Response"> &
+  (
+    | {
+        action: "getItem";
+        result: unknown;
+      }
+    | {
+        action: "keys";
+        result: string[];
+      }
+    | {
+        action: "removeItem" | "clear" | "setItem";
+      }
+  );
