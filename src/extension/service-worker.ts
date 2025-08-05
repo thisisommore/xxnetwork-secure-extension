@@ -1,4 +1,3 @@
-// src/extension/service-worker.ts
 import browser from "webextension-polyfill";
 import type { TRequest, TResponse } from "./type";
 
@@ -57,7 +56,6 @@ const processMessage = async (msg: TRequest): Promise<TResponse> => {
   }
 };
 
-// accept Ports from your page (externally_connectable must include your origin)
 browser.runtime.onConnectExternal.addListener((port) => {
   if (port.name !== "LocalStorageChannel") return;
 
