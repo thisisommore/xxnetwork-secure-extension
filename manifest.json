@@ -11,12 +11,6 @@
       "128": "128xxlogo.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["http://localhost:3000/*"],
-      "js": ["src/extension/content-script.ts"]
-    }
-  ],
   "externally_connectable": {
     "matches": ["http://localhost:3000/*"]
   },
