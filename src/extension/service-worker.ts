@@ -52,14 +52,8 @@ const processMessage = async (msg: TRequest): Promise<TResponse> => {
       };
     }
 
-    // TODO
-    // default:
-    //   // unknown action → echo back so page‐side handler can clean up
-    //   return {
-    //     api: "LocalStorage:Response",
-    //     action: msg.action,
-    //     requestId: msg.requestId,
-    //   };
+    default:
+      throw new Error(`Don't know how to handle: ${JSON.stringify(msg)}`);
   }
 };
 
