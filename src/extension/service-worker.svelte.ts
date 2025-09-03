@@ -1,10 +1,23 @@
 import browser from "webextension-polyfill";
 import type { TRequest, TResponse } from "./type";
 
+import { lockState, loadInitialState } from "./lockState.svelte";
 console.log("service-worker ready");
 
-const processMessage = async (msg: TRequest): Promise<TResponse> => {
+const processMessage = async (
+  msg: TRequest,
+): Promise<TResponse | undefined> => {
+  if (lockState.isLocked && msg.api !== "Lock:Request") {
+    return {
+      action: "locked",
+      api: "LocalStorage:Response",
+      requestId: msg.requestId,
+    };
+  }
   switch (msg.action) {
+    case "unlock":
+      await browser.action.openPopup();
+      break;
     case "clear":
       await browser.storage.local.clear();
       return {
@@ -55,19 +68,26 @@ const processMessage = async (msg: TRequest): Promise<TResponse> => {
       throw new Error(`Don't know how to handle: ${JSON.stringify(msg)}`);
   }
 };
+loadInitialState().then(() => {
+  browser.runtime.onConnectExternal.addListener((port) => {
+    if (port.name !== "LocalStorageChannel") return;
 
-browser.runtime.onConnectExternal.addListener((port) => {
-  if (port.name !== "LocalStorageChannel") return;
+    console.log("Port connected:", port.name);
 
-  console.log("Port connected:", port.name);
+    port.onMessage.addListener(async (message: unknown) => {
+      const msg = message as TRequest;
+      const response = await processMessage(msg);
+      port.postMessage(response);
+    });
 
-  port.onMessage.addListener(async (message: unknown) => {
-    const msg = message as TRequest;
-    const response = await processMessage(msg);
-    port.postMessage(response);
+    port.onDisconnect.addListener(() => {
+      console.log("Port disconnected:", port.name);
+    });
   });
 
-  port.onDisconnect.addListener(() => {
-    console.log("Port disconnected:", port.name);
+  // Accept messages from web pages (externally_connectable) without a Port
+  browser.runtime.onMessageExternal.addListener(async (message: unknown) => {
+    const msg = message as TRequest;
+    return await processMessage(msg);
   });
 });
