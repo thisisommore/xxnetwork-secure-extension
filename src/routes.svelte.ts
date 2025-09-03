@@ -1,9 +1,11 @@
 import Lockscreen from "./routes/lockscreen/+page.svelte";
 import Home from "./routes/home/+page.svelte";
 import Index from "./+page.svelte";
+import Clear from "./routes/clear/+page.svelte";
 const routes = {
   lock: Lockscreen,
   home: Home,
+  clear: Clear,
   "": Index,
 } as const;
 

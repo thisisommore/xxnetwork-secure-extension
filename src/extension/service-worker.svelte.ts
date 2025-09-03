@@ -4,6 +4,7 @@ import type { TRequest, TResponse } from "./type";
 import { lockState, loadInitialState } from "./lockState.svelte";
 console.log("service-worker ready");
 
+type Route = "clear";
 const processMessage = async (
   msg: TRequest,
 ): Promise<TResponse | undefined> => {
@@ -19,10 +20,13 @@ const processMessage = async (
       await browser.action.openPopup();
       break;
     case "clear":
-      await browser.storage.local.clear();
+      await browser.storage.session.set({ redirectTo: "clear" } satisfies {
+        redirectTo: Route;
+      });
+      await browser.action.openPopup();
       return {
         api: "LocalStorage:Response",
-        action: "clear",
+        action: "clear-requested",
         requestId: msg.requestId,
       };
 

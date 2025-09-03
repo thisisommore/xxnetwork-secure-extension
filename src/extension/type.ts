@@ -39,7 +39,12 @@ type TLSResponse = BaseMessage<"LocalStorage:Response"> &
         result: string[];
       }
     | {
-        action: "removeItem" | "clear" | "setItem" | "locked";
+        action:
+          | "removeItem"
+          | "clear-requested"
+          | "setItem"
+          | "locked"
+          | "clear";
       }
   );
 
