@@ -8,7 +8,6 @@
 
   // Loading state variables
   let actionText:
-    | "Extracting KV"
     | "Clearing Local Storage"
     | "Exporting Keys"
     | "Importing Keys"

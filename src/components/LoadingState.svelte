@@ -1,8 +1,7 @@
 <script lang="ts">
   import XxNetworkPopup from "./XXNetworkPopup.svelte";
 
-  const { actionText, hintText }: { actionText: string; hintText?: string } =
-    $props();
+  const { actionText }: { actionText: string } = $props();
 </script>
 
 <XxNetworkPopup style="gradient">
@@ -37,7 +36,7 @@
     </svg>
   </div>
   <div class="loading-container">
-    <div class="fake-button">
+    <div class="action-text">
       {actionText}
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -55,9 +54,6 @@
         <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
       </svg>
     </div>
-    {#if hintText}
-      <div class="hint">{hintText}</div>
-    {/if}
   </div>
 </XxNetworkPopup>
 
@@ -78,7 +74,7 @@
     padding-left: 30px;
     padding-right: 30px;
   }
-  .fake-button {
+  .action-text {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,17 +91,7 @@
     box-sizing: border-box;
     text-align: center;
     word-wrap: break-word;
-    cursor: pointer;
     transition: all 0.3s ease;
-  }
-  .fake-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  .hint {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
   }
   .icon {
     margin-left: 8px;
