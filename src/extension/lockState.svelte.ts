@@ -4,11 +4,9 @@
 import browser from "webextension-polyfill";
 import type { TResponse } from "./schema";
 import { appendActivity } from "./activity.svelte";
-
+import { AUTO_LOCK_ENABLED, AUTO_LOCK_MS } from "../constants";
 export const lockState: { isLocked: boolean } = $state({ isLocked: true });
 
-const AUTO_LOCK_ENABLED: boolean = false;
-export const AUTO_LOCK_MS: number = 5 * 60 * 1000; // fixed auto-lock duration
 let autoLockTimer: ReturnType<typeof setTimeout> | null = null;
 
 const STORAGE_KEY = "lock:isLocked";

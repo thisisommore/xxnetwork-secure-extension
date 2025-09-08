@@ -1,3 +1,13 @@
-const MAX_KEY_LENGTH = 500 as const;
-const MAX_VALUE_LENGTH = 1500000 as const;
-export { MAX_KEY_LENGTH, MAX_VALUE_LENGTH };
+const MAX_KEY_LENGTH: number = 500 as const;
+const MAX_VALUE_LENGTH: number = 1500000 as const;
+const AUTO_LOCK_ENABLED: boolean = false;
+const MAX_ACTIVITY_ENTRIES: number = 200;
+const AUTO_LOCK_MS: number = 5 * 60 * 1000; // fixed auto-lock duration
+
+export {
+  MAX_KEY_LENGTH,
+  MAX_VALUE_LENGTH,
+  AUTO_LOCK_ENABLED,
+  MAX_ACTIVITY_ENTRIES,
+  AUTO_LOCK_MS,
+};

@@ -1,14 +1,13 @@
 import { liveQuery } from "dexie";
 import { db, type ActivityEntry, type ActivityDirection } from "./db";
 import type { TAction } from "./schema";
+import { MAX_ACTIVITY_ENTRIES } from "../constants";
 
 export type { ActivityEntry };
 
 // Debounce removed: live queries emit immediately
 
 // Dexie liveQuery complies with Svelte store spec; return it directly.
-
-const MAX_ENTRIES = 200;
 
 export async function appendActivity(
   direction: ActivityDirection,
@@ -37,8 +36,8 @@ export async function appendActivity(
 
   // Keep only the latest MAX_ENTRIES
   const count = await db.activities.count();
-  if (count > MAX_ENTRIES) {
-    const excess = count - MAX_ENTRIES;
+  if (count > MAX_ACTIVITY_ENTRIES) {
+    const excess = count - MAX_ACTIVITY_ENTRIES;
     const oldestEntries = await db.activities
       .orderBy("timestamp")
       .limit(excess)

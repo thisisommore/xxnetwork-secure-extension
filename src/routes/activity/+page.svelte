@@ -9,7 +9,7 @@
     clearActivities,
     type ActivityEntry,
   } from "../../extension/activity.svelte";
-  import type { TAction } from "src/extension/schema";
+  import type { TAction } from "../../extension/schema";
   const pageSize = 20;
 
   let liveActivities = getActivitiesLivePaginated(pageSize);

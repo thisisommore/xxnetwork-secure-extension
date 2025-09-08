@@ -2,7 +2,7 @@
   import XXNetworkPopup from "$components/XXNetworkPopup.svelte";
   import browser from "webextension-polyfill";
   import { to } from "../../routes.svelte";
-  import type { TResponse } from "src/extension/schema";
+  import type { TResponse } from "../../extension/schema";
   const clear = async () => {
     await browser.storage.local.clear();
 
