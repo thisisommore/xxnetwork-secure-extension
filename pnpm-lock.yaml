@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      dexie:
+        specifier: ^4.2.0
+        version: 4.2.0
       viem:
         specifier: ^2.22.14
         version: 2.22.14(typescript@5.6.3)
@@ -826,6 +829,9 @@ packages:
   defer-to-connect@2.0.1:
     resolution: {integrity: sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==}
     engines: {node: '>=10'}
+
+  dexie@4.2.0:
+    resolution: {integrity: sha512-OSeyyWOUetDy9oFWeddJgi83OnRA3hSFh3RrbltmPgqHszE9f24eUCVLI4mPg0ifsWk0lQTdnS+jyGNrPMvhDA==}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -2662,6 +2668,8 @@ snapshots:
   deepmerge@4.3.1: {}
 
   defer-to-connect@2.0.1: {}
+
+  dexie@4.2.0: {}
 
   dom-serializer@2.0.0:
     dependencies:

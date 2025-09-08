@@ -3,6 +3,7 @@
 // Persists lock status in chrome.storage.session and loads on startup.
 import browser from "webextension-polyfill";
 import type { TResponse } from "./type";
+import { appendActivity } from "./activity.svelte";
 
 export const lockState: { isLocked: boolean } = $state({ isLocked: true });
 
@@ -35,6 +36,11 @@ export async function lock() {
   lockState.isLocked = true;
   clearAutoLockTimer();
   await persistLockState();
+  try {
+    await appendActivity("event", { api: "Lock", action: "lock" });
+  } catch (e) {
+    console.error("activity log lock error", e);
+  }
   // only route if running in extension ui
   // to check this we use window, service worker doesn't have window object
   if (typeof window !== "undefined") {
@@ -46,6 +52,11 @@ export async function unlock() {
   lockState.isLocked = false;
   lockAfterTimeout();
   await persistLockState();
+  try {
+    await appendActivity("event", { api: "Lock", action: "unlock" });
+  } catch (e) {
+    console.error("activity log unlock error", e);
+  }
   const response: TResponse = {
     api: "Lock:Response",
     action: "unlocked",

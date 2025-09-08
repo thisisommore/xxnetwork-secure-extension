@@ -1,6 +1,7 @@
 <script lang="ts">
   const { importKeys, exportKeys, clearKeys } = $props();
   import { lock } from "../../extension/lockState.svelte";
+  import { to } from "../../routes.svelte";
 </script>
 
 <div class="final-container">
@@ -9,6 +10,9 @@
   </div>
   <button class="action-button" onclick={importKeys}> Import Keys </button>
   <button class="action-button" onclick={exportKeys}> Export Keys </button>
+  <button class="action-button" onclick={() => to("activity")}>
+    Activity Logs
+  </button>
   <button class="action-button" onclick={clearKeys}> Clear Keys </button>
   <button class="action-button" onclick={lock}> Lock </button>
 </div>

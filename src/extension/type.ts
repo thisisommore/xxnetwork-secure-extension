@@ -50,3 +50,11 @@ type TLSResponse = BaseMessage<"LocalStorage:Response"> &
 
 export type TResponse = TLSResponse | TLockResponse;
 export type TRequest = TLSRequest | TLockRequest;
+export type TAction =
+  | TRequest["action"]
+  | TResponse["action"]
+  | "import_keys"
+  | "export_keys"
+  | "clear_keys"
+  | "started"
+  | "lock";

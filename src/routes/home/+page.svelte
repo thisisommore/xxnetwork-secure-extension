@@ -5,6 +5,7 @@
   import Toast from "./Toast.svelte";
   import MysticalBackground from "$components/MysticalBackground.svelte";
   import XxNetworkPopup from "$components/XXNetworkPopup.svelte";
+  import { appendActivity } from "../../extension/activity.svelte";
 
   // Loading state variables
   let actionText:
@@ -87,6 +88,15 @@
             `Successfully imported ${importedCount} of ${Object.keys(jsonData).length} keys`,
           );
           showToast(`${importedCount} keys imported successfully!`, "success");
+          try {
+            await appendActivity("event", {
+              api: "Keys",
+              action: "import_keys",
+              count: importedCount,
+            });
+          } catch (e) {
+            console.error("activity log import_keys error", e);
+          }
         } catch (error) {
           console.error("Error during import process:", error);
           showToast("Error importing keys", "error");
@@ -140,6 +150,15 @@
       URL.revokeObjectURL(url);
       console.log(`Successfully exported ${Object.keys(allData).length} keys`);
       showToast("Keys exported successfully!", "success");
+      try {
+        await appendActivity("event", {
+          api: "Keys",
+          action: "export_keys",
+          count: Object.keys(allData).length,
+        });
+      } catch (e) {
+        console.error("activity log export_keys error", e);
+      }
     } catch (error) {
       console.error("Error exporting keys:", error);
       showToast("Error exporting keys", "error");
@@ -165,6 +184,15 @@
 
         console.log(`Successfully cleared ${keyCount} keys from storage`);
         showToast("Keys cleared successfully!", "success");
+        try {
+          await appendActivity("event", {
+            api: "Keys",
+            action: "clear_keys",
+            count: keyCount,
+          });
+        } catch (e) {
+          console.error("activity log clear_keys error", e);
+        }
       } catch (error) {
         console.error("Error clearing keys:", error);
         showToast("Error clearing keys", "error");
