@@ -1,8 +1,9 @@
 import browser from "webextension-polyfill";
-import type { TRequest, TResponse } from "./type";
+import type { TRequest, TResponse } from "./schema";
 import { appendActivity } from "./activity.svelte";
 
 import { lockState, loadInitialState } from "./lockState.svelte";
+import { TRequestSchema } from "./schema";
 console.log("service-worker ready");
 
 type Route = "clear";
@@ -152,7 +153,12 @@ loadInitialState().then(async () => {
     console.log("Port connected:", port.name);
 
     port.onMessage.addListener(async (message: unknown) => {
-      const msg = message as TRequest;
+      const parsed = TRequestSchema.safeParse(message);
+      if (!parsed.success) {
+        console.warn("Invalid message received", message, parsed.error);
+        return;
+      }
+      const msg = parsed.data as TRequest;
       const response = await processMessage(msg);
       port.postMessage(response);
     });
@@ -164,7 +170,12 @@ loadInitialState().then(async () => {
 
   // Accept messages from web pages (externally_connectable) without a Port
   browser.runtime.onMessageExternal.addListener(async (message: unknown) => {
-    const msg = message as TRequest;
+    const parsed = TRequestSchema.safeParse(message);
+    if (!parsed.success) {
+      console.warn("Invalid message received", message, parsed.error);
+      return undefined;
+    }
+    const msg = parsed.data as TRequest;
     return await processMessage(msg);
   });
 });

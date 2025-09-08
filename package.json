@@ -30,6 +30,7 @@
     "dexie": "^4.2.0",
     "viem": "^2.22.14",
     "vite-plugin-web-extension": "^4.4.3",
-    "webextension-polyfill": "^0.12.0"
+    "webextension-polyfill": "^0.12.0",
+    "zod": "^4.1.5"
   }
 }

@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
-import type { TAction } from "./type";
+import type { TAction } from "./schema";
 
 export interface ActivityEntry {
   id: string;

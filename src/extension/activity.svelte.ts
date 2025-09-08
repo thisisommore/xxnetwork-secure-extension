@@ -1,6 +1,6 @@
 import { liveQuery } from "dexie";
 import { db, type ActivityEntry, type ActivityDirection } from "./db";
-import type { TAction } from "./type";
+import type { TAction } from "./schema";
 
 export type { ActivityEntry };
 

@@ -2,7 +2,7 @@
 // Default is locked and state is not persisted (auto-locks on process reload).
 // Persists lock status in chrome.storage.session and loads on startup.
 import browser from "webextension-polyfill";
-import type { TResponse } from "./type";
+import type { TResponse } from "./schema";
 import { appendActivity } from "./activity.svelte";
 
 export const lockState: { isLocked: boolean } = $state({ isLocked: true });
