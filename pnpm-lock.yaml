@@ -11,6 +11,9 @@ importers:
       dexie:
         specifier: ^4.2.0
         version: 4.2.0
+      rate-limiter-flexible:
+        specifier: ^7.3.0
+        version: 7.3.0
       viem:
         specifier: ^2.22.14
         version: 2.22.14(typescript@5.6.3)(zod@4.1.5)
@@ -1607,6 +1610,9 @@ packages:
   quick-lru@5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
+
+  rate-limiter-flexible@7.3.0:
+    resolution: {integrity: sha512-0R5gYs0m+jLGqcE6wxuvht+zuch0h4Un+JqVCEWaQajJGCWU2HzY0IFDp8WS8NNqIpviJOLmkZ5VKmzW/8q5dA==}
 
   rc@1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
@@ -3443,6 +3449,8 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   quick-lru@5.1.1: {}
+
+  rate-limiter-flexible@7.3.0: {}
 
   rc@1.2.8:
     dependencies:

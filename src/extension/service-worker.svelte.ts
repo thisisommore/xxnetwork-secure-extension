@@ -4,6 +4,7 @@ import { appendActivity } from "./activity.svelte";
 
 import { lockState, loadInitialState } from "./lockState.svelte";
 import { TRequestSchema } from "./schema";
+import { consume } from "./rateLimiter";
 console.log("service-worker ready");
 
 type Route = "clear";
@@ -34,6 +35,16 @@ const processMessage = async (
     }
     return response;
   }
+  // Rate-limit all actions except unlock
+  if (msg.action !== "unlock") {
+    try {
+      await consume();
+    } catch (e) {
+      console.warn("Rate limit error:", msg.api, msg.action, e);
+      return undefined;
+    }
+  }
+
   switch (msg.action) {
     case "unlock":
       await browser.action.openPopup();
