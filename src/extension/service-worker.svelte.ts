@@ -4,7 +4,7 @@ import { appendActivity } from "./activity.svelte";
 
 import { lockState, loadInitialState } from "./lockState.svelte";
 import { TRequestSchema } from "./schema";
-import { consume } from "./rateLimiter";
+import { consume, requestsDone } from "./rateLimiter";
 console.log("service-worker ready");
 
 type Route = "clear";
@@ -35,72 +35,53 @@ const processMessage = async (
     }
     return response;
   }
-  // Rate-limit all actions except unlock
-  if (msg.action !== "unlock") {
-    try {
-      await consume();
-    } catch (e) {
-      console.warn("Rate limit error:", msg.api, msg.action, e);
-      return undefined;
-    }
+  // Rate-limit all actions (including unlock)
+  try {
+    await consume();
+  } catch (e) {
+    console.error("error:", msg.api, msg.action, e);
+    requestsDone();
+    return undefined;
   }
 
-  switch (msg.action) {
-    case "unlock":
-      await browser.action.openPopup();
-      break;
-    case "clear":
-      await browser.storage.session.set({ redirectTo: "clear" } satisfies {
-        redirectTo: Route;
-      });
-      await browser.action.openPopup();
-      {
-        const response: TResponse = {
-          api: "LocalStorage:Response",
-          action: "clear-requested",
-          requestId: msg.requestId,
-        };
-        try {
-          await appendActivity("response", response);
-        } catch (e) {
-          console.error("activity response log error", e);
-        }
-        return response;
-      }
-
-    case "getItem": {
-      const result =
-        (await browser.storage.local.get(msg.key))[msg.key] ?? null;
-      const response: TResponse = {
-        api: "LocalStorage:Response",
-        action: "getItem",
-        result,
-        requestId: msg.requestId,
-      };
-      try {
-        await appendActivity("response", {
-          api: response.api,
-          action: response.action,
-          requestId: response.requestId,
-          key: msg.key,
+  try {
+    switch (msg.action) {
+      case "unlock":
+        await browser.action.openPopup();
+        break;
+      case "clear":
+        await browser.storage.session.set({ redirectTo: "clear" } satisfies {
+          redirectTo: Route;
         });
-      } catch (e) {
-        console.error("activity response log error", e);
-      }
-      return response;
-    }
+        await browser.action.openPopup();
+        {
+          const response: TResponse = {
+            api: "LocalStorage:Response",
+            action: "clear-requested",
+            requestId: msg.requestId,
+          };
+          try {
+            await appendActivity("response", response);
+          } catch (e) {
+            console.error("activity response log error", e);
+          }
+          return response;
+        }
 
-    case "removeItem":
-      await browser.storage.local.remove(msg.key);
-      {
+      case "getItem": {
+        const result =
+          (await browser.storage.local.get(msg.key))[msg.key] ?? null;
         const response: TResponse = {
           api: "LocalStorage:Response",
-          action: "removeItem",
+          action: "getItem",
+          result,
           requestId: msg.requestId,
         };
         try {
           await appendActivity("response", {
-            ...response,
+            api: response.api,
+            action: response.action,
+            requestId: response.requestId,
             key: msg.key,
           });
         } catch (e) {
@@ -109,18 +90,60 @@ const processMessage = async (
         return response;
       }
 
-    case "setItem":
-      await browser.storage.local.set({ [msg.key!]: msg.value });
-      {
+      case "removeItem":
+        await browser.storage.local.remove(msg.key);
+        {
+          const response: TResponse = {
+            api: "LocalStorage:Response",
+            action: "removeItem",
+            requestId: msg.requestId,
+          };
+          try {
+            await appendActivity("response", {
+              ...response,
+              key: msg.key,
+            });
+          } catch (e) {
+            console.error("activity response log error", e);
+          }
+          return response;
+        }
+
+      case "setItem":
+        await browser.storage.local.set({ [msg.key!]: msg.value });
+        {
+          const response: TResponse = {
+            api: "LocalStorage:Response",
+            action: "setItem",
+            requestId: msg.requestId,
+          };
+          try {
+            await appendActivity("response", {
+              ...response,
+              key: msg.key,
+            });
+          } catch (e) {
+            console.error("activity response log error", e);
+          }
+          return response;
+        }
+
+      case "keys": {
+        const all = await browser.storage.local.get(null);
+        const keys = Object.keys(all);
         const response: TResponse = {
           api: "LocalStorage:Response",
-          action: "setItem",
+          action: "keys",
+          result: keys,
           requestId: msg.requestId,
         };
         try {
           await appendActivity("response", {
-            ...response,
-            key: msg.key,
+            api: response.api,
+            action: response.action,
+            requestId: response.requestId,
+            keys,
+            count: keys.length,
           });
         } catch (e) {
           console.error("activity response log error", e);
@@ -128,31 +151,14 @@ const processMessage = async (
         return response;
       }
 
-    case "keys": {
-      const all = await browser.storage.local.get(null);
-      const keys = Object.keys(all);
-      const response: TResponse = {
-        api: "LocalStorage:Response",
-        action: "keys",
-        result: keys,
-        requestId: msg.requestId,
-      };
-      try {
-        await appendActivity("response", {
-          api: response.api,
-          action: response.action,
-          requestId: response.requestId,
-          keys,
-          count: keys.length,
-        });
-      } catch (e) {
-        console.error("activity response log error", e);
-      }
-      return response;
+      default:
+        throw new Error(`Don't know how to handle: ${JSON.stringify(msg)}`);
     }
-
-    default:
-      throw new Error(`Don't know how to handle: ${JSON.stringify(msg)}`);
+  } catch (e) {
+    console.error("processMessage error", e);
+    throw e;
+  } finally {
+    requestsDone();
   }
 };
 loadInitialState().then(async () => {
