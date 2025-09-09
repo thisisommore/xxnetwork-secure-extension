@@ -12,10 +12,18 @@
     }
   },
   "externally_connectable": {
-    "matches": ["http://localhost:3000/*"]
+    "matches": ["http://localhost:3000/*", "http://localhost:3001/*"]
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["http://localhost:3000/*", "http://localhost:3001/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:3000/*", "http://localhost:3001/*"],
+      "js": ["src/extension/content-script.ts"],
+      "run_at": "document_start"
+    }
+  ],
   "background": {
-    "service_worker": "src/extension/service-worker.ts"
+    "service_worker": "src/extension/service-worker.svelte.ts"
   }
 }

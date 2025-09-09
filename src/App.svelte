@@ -1,17 +1,19 @@
 <script lang="ts">
-  import Index from "./+page.svelte";
   import Router from "$components/Router.svelte";
-  import Home from "./routes/home/+page.svelte";
-  import Loading from "./routes/loading/+page.svelte";
+  import { loadInitialState } from "./extension/lockState.svelte";
   // Define routes for the router as an object with path keys and component values
-  const routes = {
-    "": Index,
-    loading: Loading,
-    home: Home,
-    // Add more routes here as needed
-  };
+  import routes from "./routes.svelte";
+  let isLoading = $state(true);
+
+  loadInitialState().then(() => {
+    isLoading = false;
+  });
 </script>
 
 <main style="width: 100%; height: 100%;">
-  <Router {routes} />
+  {#if isLoading}
+    <p>Loading...</p>
+  {:else}
+    <Router {routes} />
+  {/if}
 </main>
