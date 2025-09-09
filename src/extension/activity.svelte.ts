@@ -20,29 +20,33 @@ export async function appendActivity(
     count?: number;
   },
 ): Promise<void> {
-  const entry: ActivityEntry = {
-    id: crypto.randomUUID(),
-    timestamp: Date.now(),
-    direction,
-    api: params.api,
-    action: params.action,
-    requestId: params.requestId,
-    key: params.key,
-    keys: params.keys,
-    count: params.count,
-  };
+  try {
+    const entry: ActivityEntry = {
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      direction,
+      api: params.api,
+      action: params.action,
+      requestId: params.requestId,
+      key: params.key,
+      keys: params.keys,
+      count: params.count,
+    };
 
-  await db.activities.add(entry);
+    await db.activities.add(entry);
 
-  // Keep only the latest MAX_ENTRIES
-  const count = await db.activities.count();
-  if (count > MAX_ACTIVITY_ENTRIES) {
-    const excess = count - MAX_ACTIVITY_ENTRIES;
-    const oldestEntries = await db.activities
-      .orderBy("timestamp")
-      .limit(excess)
-      .primaryKeys();
-    await db.activities.bulkDelete(oldestEntries);
+    // Keep only the latest MAX_ENTRIES
+    const count = await db.activities.count();
+    if (count > MAX_ACTIVITY_ENTRIES) {
+      const excess = count - MAX_ACTIVITY_ENTRIES;
+      const oldestEntries = await db.activities
+        .orderBy("timestamp")
+        .limit(excess)
+        .primaryKeys();
+      await db.activities.bulkDelete(oldestEntries);
+    }
+  } catch (e) {
+    console.error("activity log error", e);
   }
 }
 

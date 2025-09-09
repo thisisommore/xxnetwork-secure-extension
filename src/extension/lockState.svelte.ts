@@ -34,11 +34,9 @@ export async function lock() {
   lockState.isLocked = true;
   clearAutoLockTimer();
   await persistLockState();
-  try {
-    await appendActivity("event", { api: "Lock", action: "lock" });
-  } catch (e) {
-    console.error("activity log lock error", e);
-  }
+
+  appendActivity("event", { api: "Lock", action: "lock" });
+
   // only route if running in extension ui
   // to check this we use window, service worker doesn't have window object
   if (typeof window !== "undefined") {
@@ -50,11 +48,8 @@ export async function unlock() {
   lockState.isLocked = false;
   lockAfterTimeout();
   await persistLockState();
-  try {
-    await appendActivity("event", { api: "Lock", action: "unlock" });
-  } catch (e) {
-    console.error("activity log unlock error", e);
-  }
+  appendActivity("event", { api: "Lock", action: "unlock" });
+
   const response: TResponse = {
     api: "Lock:Response",
     action: "unlocked",

@@ -12,27 +12,21 @@ const processMessage = async (
   msg: TRequest,
 ): Promise<TResponse | undefined> => {
   // Log request (only metadata)
-  try {
-    await appendActivity("request", {
-      api: msg.api,
-      action: msg.action,
-      requestId: msg.requestId,
-      key: "key" in msg ? msg.key : undefined,
-    });
-  } catch (e) {
-    console.error("activity request log error", e);
-  }
+  appendActivity("request", {
+    api: msg.api,
+    action: msg.action,
+    requestId: msg.requestId,
+    key: "key" in msg ? msg.key : undefined,
+  });
+
   if (lockState.isLocked && msg.api !== "Lock:Request") {
     const response = {
       action: "locked",
       api: "LocalStorage:Response",
       requestId: msg.requestId,
     } satisfies TResponse;
-    try {
-      await appendActivity("response", response);
-    } catch (e) {
-      console.error("activity response log error", e);
-    }
+    appendActivity("response", response);
+
     return response;
   }
   // Rate-limit all actions (including unlock)
@@ -60,11 +54,8 @@ const processMessage = async (
             action: "clear-requested",
             requestId: msg.requestId,
           };
-          try {
-            await appendActivity("response", response);
-          } catch (e) {
-            console.error("activity response log error", e);
-          }
+          appendActivity("response", response);
+
           return response;
         }
 
@@ -77,16 +68,13 @@ const processMessage = async (
           result,
           requestId: msg.requestId,
         };
-        try {
-          await appendActivity("response", {
-            api: response.api,
-            action: response.action,
-            requestId: response.requestId,
-            key: msg.key,
-          });
-        } catch (e) {
-          console.error("activity response log error", e);
-        }
+        appendActivity("response", {
+          api: response.api,
+          action: response.action,
+          requestId: response.requestId,
+          key: msg.key,
+        });
+
         return response;
       }
 
@@ -98,14 +86,11 @@ const processMessage = async (
             action: "removeItem",
             requestId: msg.requestId,
           };
-          try {
-            await appendActivity("response", {
-              ...response,
-              key: msg.key,
-            });
-          } catch (e) {
-            console.error("activity response log error", e);
-          }
+          appendActivity("response", {
+            ...response,
+            key: msg.key,
+          });
+
           return response;
         }
 
@@ -117,14 +102,11 @@ const processMessage = async (
             action: "setItem",
             requestId: msg.requestId,
           };
-          try {
-            await appendActivity("response", {
-              ...response,
-              key: msg.key,
-            });
-          } catch (e) {
-            console.error("activity response log error", e);
-          }
+          appendActivity("response", {
+            ...response,
+            key: msg.key,
+          });
+
           return response;
         }
 
@@ -137,17 +119,14 @@ const processMessage = async (
           result: keys,
           requestId: msg.requestId,
         };
-        try {
-          await appendActivity("response", {
-            api: response.api,
-            action: response.action,
-            requestId: response.requestId,
-            keys,
-            count: keys.length,
-          });
-        } catch (e) {
-          console.error("activity response log error", e);
-        }
+        appendActivity("response", {
+          api: response.api,
+          action: response.action,
+          requestId: response.requestId,
+          keys,
+          count: keys.length,
+        });
+
         return response;
       }
 
@@ -172,11 +151,13 @@ loadInitialState().then(async () => {
     port.onMessage.addListener(async (message: unknown) => {
       const parsed = TRequestSchema.safeParse(message);
       if (!parsed.success) {
-        console.warn("Invalid message received", message, parsed.error);
+        console.error("Invalid message received", message, parsed.error);
         return;
       }
-      const msg = parsed.data as TRequest;
+
+      const msg = parsed.data;
       const response = await processMessage(msg);
+
       port.postMessage(response);
     });
 
@@ -189,7 +170,7 @@ loadInitialState().then(async () => {
   browser.runtime.onMessageExternal.addListener(async (message: unknown) => {
     const parsed = TRequestSchema.safeParse(message);
     if (!parsed.success) {
-      console.warn("Invalid message received", message, parsed.error);
+      console.error("Invalid message received", message, parsed.error);
       return undefined;
     }
     const msg = parsed.data as TRequest;
