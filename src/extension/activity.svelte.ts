@@ -1,7 +1,6 @@
 import { liveQuery } from "dexie";
 import { db, type ActivityEntry, type ActivityDirection } from "./db";
 import type { TAction } from "./schema";
-import { MAX_ACTIVITY_ENTRIES } from "../constants";
 
 export type { ActivityEntry };
 
@@ -35,16 +34,16 @@ export async function appendActivity(
 
     await db.activities.add(entry);
 
-    // Keep only the latest MAX_ENTRIES
-    const count = await db.activities.count();
-    if (count > MAX_ACTIVITY_ENTRIES) {
-      const excess = count - MAX_ACTIVITY_ENTRIES;
-      const oldestEntries = await db.activities
-        .orderBy("timestamp")
-        .limit(excess)
-        .primaryKeys();
-      await db.activities.bulkDelete(oldestEntries);
-    }
+    // // Keep only the latest MAX_ENTRIES
+    // const count = await db.activities.count();
+    // if (count > MAX_ACTIVITY_ENTRIES) {
+    //   const excess = count - MAX_ACTIVITY_ENTRIES;
+    //   const oldestEntries = await db.activities
+    //     .orderBy("timestamp")
+    //     .limit(excess)
+    //     .primaryKeys();
+    //   await db.activities.bulkDelete(oldestEntries);
+    // }
   } catch (e) {
     console.error("activity log error", e);
   }
