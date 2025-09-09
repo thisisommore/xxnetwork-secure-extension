@@ -4,5 +4,5 @@ export const AUTO_LOCK_ENABLED: boolean = false;
 export const MAX_ACTIVITY_ENTRIES: number = 200;
 export const AUTO_LOCK_MS: number = 5 * 60 * 1000; // fixed auto-lock duration
 export const MAX_ACTIVE_REQUESTS: number = 50;
-export const RATE_LIMITER_POINTS: number = 1;
+export const RATE_LIMITER_POINTS: number = 10000;
 export const RATE_LIMITER_DURATION: number = 10; // seconds
